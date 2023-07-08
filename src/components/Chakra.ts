@@ -3,7 +3,7 @@ import GSAP from 'gsap';
 import vertexShader from './shaders/vertex.glsl';
 import fragmentShader from './shaders/fragment.glsl';
 
-export default class ScrollStage {
+export default class Chakra {
 
    
     private geometry!: THREE.IcosahedronGeometry;
@@ -11,7 +11,6 @@ export default class ScrollStage {
     private mesh!: THREE.Mesh;
 
     private mouse: { x: number, y: number };
-    private settings: any;
 
     constructor(private element: HTMLElement) {
         console.log('ScrollStage');
@@ -42,35 +41,6 @@ export default class ScrollStage {
         this.mouse = {
             x: 0,
             y: 0
-        }
-
-        this.settings = {
-            // vertex
-            uFrequency: {
-                start: 0,
-                end: 0
-            },
-            uAmplitude: {
-                start: 0,
-                end: 0
-            },
-            uDensity: {
-                start: 0,
-                end: 0
-            },
-            uStrength: {
-                start: 0,
-                end: 0
-            },
-            // fragment
-            uDeepPurple: {  // max 1
-                start: 0,
-                end: 0
-            },
-            uOpacity: {  // max 1
-                start: 1,
-                end: 1
-            }
         }
 
         this.init();
@@ -182,11 +152,12 @@ export default class ScrollStage {
         this.mouse.x = Number((Number(event.clientX) / Number(this.viewport.width)).toFixed(2)) * 4
         this.mouse.y = Number((Number(event.clientY) / Number(this.viewport.height)).toFixed(2)) * 2
 
-    
-        GSAP.to(this.mesh.material.uniforms.uFrequency, { value: this.mouse.x / 1.5})
-        GSAP.to(this.mesh.material.uniforms.uAmplitude, { value: this.mouse.x / 1.5 })
-        GSAP.to(this.mesh.material.uniforms.uDensity, { value: this.mouse.y / 1.5 })
-        GSAP.to(this.mesh.material.uniforms.uStrength, { value: this.mouse.y / 1.5 })
+        if (this.mesh.material instanceof THREE.ShaderMaterial) {
+            GSAP.to(this.mesh.material.uniforms.uFrequency, { value: this.mouse.x / 1.5})
+            GSAP.to(this.mesh.material.uniforms.uAmplitude, { value: this.mouse.x / 1.5 })
+            GSAP.to(this.mesh.material.uniforms.uDensity, { value: this.mouse.y / 1.5 })
+            GSAP.to(this.mesh.material.uniforms.uStrength, { value: this.mouse.y / 1.5 })
+        }
         // GSAP.to(this.mesh.material.uniforms.uDeepPurple, { value: this.mouse.x })
         // GSAP.to(this.mesh.material.uniforms.uOpacity, { value: this.mouse.y })
     
